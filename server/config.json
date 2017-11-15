@@ -2,7 +2,7 @@
   "development": {
     "username": "diane",
     "password": "password",
-    "database": "todos",
+    "database": "csvdatabase",
     "host": "127.0.0.1",
     "port": "5432",
     "dialect": "postgres"
