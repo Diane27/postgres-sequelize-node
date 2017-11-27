@@ -8,9 +8,9 @@ var basename  = path.basename(module.filename);
 var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config.json')[env];
 var db        = {};
-var stream    = fs.createReadStream("./server/models/contacts.csv");
+var stream    = fs.createReadStream("./server/models/FilteredRaw.csv");
 var async     = require('async')
-var Contacts = require('./contact');
+
 
 
 /* Connects to database */
@@ -58,20 +58,21 @@ stream
   .on('headers', function (headerList) {
     var item;
     for (item in headerList){
-      console.log('Header %s: %s', item+1, headerList[item])
+      console.log('Header %s: %s', item, headerList[item])
+      //implement code to check if header match database here    
     }
   });
-/*
-var parser = csv.fromStream(stream, {headers : true}).on("data", function(data) {
-  parser.pause();
-  console.log(data);
-  //inserter.push(data);
-  parser.resume();
-}).on("end", function(){
+
+stream
+  .pipe(csv())
+  .on('data', function (data) {
+    console.log(data);
+    //inserter.push(data); to save data into database
+  })
+  .on("end", function(){
   console.log('end of saving file');
 });
 
-*/
 /* Already Existing from tutorial */
 Object.keys(db).forEach(function(modelName) {
   if (db[modelName].associate) {
